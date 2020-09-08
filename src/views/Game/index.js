@@ -170,8 +170,8 @@ function Game() {
                         pos: players[i].currentPos,
                         color: players[i].color.hex
                     });  
-                    setMarkers(markerP);
                 };
+                setMarkers(markerP);
                 setMarkB(false);
             });
         } else {
@@ -179,10 +179,6 @@ function Game() {
         }
     });
 
-    useEffect(()=>{
-
-    }, [markers])
-    
   return (
     <div className={classes.container}>
         <div style={{ width: '85%', height: '100%', zIndex: 1}}>
