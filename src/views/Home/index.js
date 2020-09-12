@@ -131,7 +131,7 @@ export default function Home() {
     const classes = useStyles(); 
 
     return (
-        <div className={classes.container}>
+        <div className={classes.container}>\
             <Card className={classes.root}>
             <CardContent className={classes.cardContent}>
             <Typography className={classes.title} variant="h4" component="h2">

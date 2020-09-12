@@ -4,7 +4,7 @@ import { useHistory } from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
 import 'leaflet/dist/leaflet.css';
 import "leaflet/dist/images/marker-icon.png";
-import { Map, Marker, TileLayer } from "react-leaflet";
+import { Map, Marker, TileLayer, Polyline } from "react-leaflet";
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -128,6 +128,7 @@ function Game() {
     const [long, setLong] = useState('');
     const [markB, setMarkB] = useState(true);
     const [markers, setMarkers] = useState([]);
+    const [correctMarker, setCorMarker] = useState(false);
 
     const handleClick = (e) =>{
         if(mark == false){
@@ -141,13 +142,18 @@ function Game() {
             comp = comp * players[i].marked;
         }
         if( comp == true ){
-            for(var j = 0; j < players.length; j++) {
-                //console.log(players[j].name, players[j].currentPos, players[j].color.hex);  
+            if(lat.length && long.length && lat <= 90 && lat >= -90 && long <= 180 && long >= -180){
+                for(var j = 0; j < players.length; j++) {
+                    //console.log(players[j].name, players[j].currentPos, players[j].color.hex);  
+                }
+                socket.emit('adminConf', {lat: lat, long: long});
+                setCorMarker(true);
+                console.log('confirmando markers');
+            } else {
+                console.log('lat errada');
             }
-            socket.emit('adminConf', {});
-            console.log('true');
         } else {
-            console.log('false');
+            console.log('faltam confirmações');
         }
     };
     
@@ -206,13 +212,13 @@ function Game() {
                                     html: ReactDOMServer.renderToString(
                                         <span style={{ 
                                             backgroundColor: (user.color != undefined ? player.color : '#fff'), 
-                                            width: '3rem', 
-                                            height: '3rem',
+                                            width: '1.5rem', 
+                                            height: '1.5rem',
                                             display: 'block',
-                                            left: '-1.5rem',
-                                            top: '-3rem',
+                                            left: '-1rem',
+                                            top: '-.5rem',
                                             position: 'relative',
-                                            borderRadius: '3rem 3rem 0',
+                                            borderRadius: '1.5rem 1.5rem 0',
                                             transform: 'rotate(45deg)',
                                             border: '1px solid #000',
                                         }}>
@@ -235,13 +241,13 @@ function Game() {
                                 html: ReactDOMServer.renderToString(
                                     <span style={{ 
                                         backgroundColor: (user.color !== undefined ? user.color.hex : '#fff'), 
-                                        width: '3rem', 
-                                        height: '3rem',
+                                        width: '1.5rem', 
+                                        height: '1.5rem',
                                         display: 'block',
-                                        left: '-1.5rem',
-                                        top: '-3rem',
+                                        left: '-1rem',
+                                        top: '-.5rem',
                                         position: 'relative',
-                                        borderRadius: '3rem 3rem 0',
+                                        borderRadius: '1.5rem 1.5rem 0',
                                         transform: 'rotate(45deg)',
                                         border: '1px solid #000',
                                     }}>
@@ -250,6 +256,50 @@ function Game() {
                         } draggable={false}>
                         </Marker>
                     )
+                }
+                {
+                    correctMarker && 
+                        (
+                        <>
+                        <Marker position={L.latLng(lat, long)} icon={ 
+                            L.divIcon({
+                                className: "my-custom-pin",
+                                iconAnchor: [0, 24],
+                                labelAnchor: [-6, 0],
+                                popupAnchor: [0, -36],
+                                html: ReactDOMServer.renderToString(
+                                    <span style={{ 
+                                        backgroundColor: '#fff', 
+                                        width: '3rem', 
+                                        height: '3rem',
+                                        display: 'flex',
+                                        left: '-1.5rem',
+                                        top: '-2.4rem',
+                                        position: 'relative',
+                                        borderRadius: '3rem 3rem 0',
+                                        transform: 'rotate(45deg)',
+                                        border: '1px solid #000',
+                                        justifyContent: 'center',
+                                        alignItems: 'center'
+                                    }}>
+                                       <span style={{ 
+                                        backgroundColor: '#000', 
+                                        width: '2rem', 
+                                        height: '2rem',
+                                        display: 'block',
+                                        position: 'relative',
+                                        borderRadius: '2rem 2rem 0',
+                                        border: '1px solid #000',
+                                      }}>
+                                      </span>
+                                    </span>
+                                ) 
+                            })
+                        } draggable={false}>
+                        </Marker>
+                        <Polyline positions={[currentPos, L.latLng(lat, long)]}/>
+                        </>
+                        )
                 }
             </Map>
             {markB &&
