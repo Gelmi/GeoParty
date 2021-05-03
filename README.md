@@ -2,7 +2,7 @@
 **GeoParty** is a ReactJS web game that brings together party games and geography.
 You can test it [right here](https://ggelmi.online/geoparty)!
 
-![GeoParty Test](https://raw.githack.com/Gelmi/GeoParty/master/GeoPartyGif.gif)
+![GeoParty Test](https://github.com/Gelmi/GeoParty/blob/master/GeoPartyGif.gif)
 ## Project Status
 This project is currently in development. Users can log into the platform, mark places and interact with other players.
 Functionality to score points by distance to objetive is in progress.
